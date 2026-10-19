@@ -1,0 +1,619 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALDS STORE | Tu estilo, tu esencia</title>
+<meta name="description" content="Descubre perfumes, gorras, camisetas y zapatillas en ALDS STORE.">
+<style>
+:root {
+  --black:#111111;
+  --gold:#c9a66b;
+  --cream:#f7f4ee;
+  --gray:#777777;
+  --white:#ffffff;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--black);
+  background:var(--white);
+}
+button,input,textarea,select { font:inherit; }
+button { cursor:pointer; }
+.topbar {
+  padding:10px;
+  background:var(--black);
+  color:var(--gold);
+  text-align:center;
+  font-size:11px;
+  letter-spacing:2px;
+}
+header {
+  position:sticky;
+  top:0;
+  z-index:5;
+  background:white;
+  border-bottom:1px solid #eee;
+}
+nav {
+  max-width:1150px;
+  margin:auto;
+  padding:18px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+}
+.logo {
+  font-size:23px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+.logo span { color:var(--gold); }
+.navlinks { display:flex;gap:20px; }
+.navlinks a {
+  color:#222;
+  text-decoration:none;
+  font-size:13px;
+}
+.cart-button {
+  border:0;
+  padding:12px 15px;
+  background:var(--black);
+  color:white;
+}
+.hero {
+  background:linear-gradient(115deg,#101010,#29251f);
+  color:white;
+  padding:75px 22px;
+}
+.hero-inner { max-width:1100px;margin:auto; }
+.eyebrow {
+  color:var(--gold);
+  font-size:11px;
+  font-weight:bold;
+  letter-spacing:3px;
+}
+.hero h1 {
+  font-size:clamp(42px,7vw,76px);
+  line-height:1;
+  margin:20px 0;
+}
+.hero p {
+  max-width:480px;
+  color:#ddd;
+  line-height:1.8;
+}
+.gold-button {
+  margin-top:18px;
+  padding:15px 22px;
+  background:var(--gold);
+  color:#111;
+  border:0;
+  font-weight:bold;
+}
+.section {
+  max-width:1150px;
+  margin:auto;
+  padding:48px 22px;
+}
+.section h2 { font-size:29px;margin:10px 0; }
+.muted { color:var(--gray);font-size:13px;line-height:1.6; }
+.tools {
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin:24px 0;
+}
+.tools input {
+  flex:1;
+  min-width:180px;
+  padding:12px;
+  border:1px solid #ddd;
+}
+.filter {
+  padding:11px 15px;
+  border:1px solid #ddd;
+  background:white;
+  font-size:12px;
+}
+.filter.active { background:#111;color:white; }
+.products {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:17px;
+}
+.product { border:1px solid #eee;min-width:0; }
+.product-image {
+  width:100%;
+  height:190px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--cream);
+  overflow:hidden;
+  color:#888;
+  font-size:12px;
+  text-align:center;
+}
+.product-image img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.product-info { padding:14px; }
+.tag {
+  color:#9a7847;
+  font-size:10px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+.product h3 { font-size:15px; }
+.product p { color:var(--gray);font-size:12px;line-height:1.5; }
+.price { font-size:19px;font-weight:bold;margin:15px 0; }
+.add-button {
+  width:100%;
+  padding:12px 6px;
+  border:0;
+  background:#111;
+  color:white;
+  font-size:11px;
+}
+.empty {
+  padding:30px;
+  color:var(--gray);
+  text-align:center;
+  grid-column:1/-1;
+}
+.benefits { background:var(--cream); }
+.benefit-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:25px;
+}
+.benefit-grid p { color:var(--gray);font-size:13px;line-height:1.7; }
+.contact { background:#111;color:white; }
+footer {
+  padding:25px;
+  color:#777;
+  font-size:11px;
+  text-align:center;
+}
+.overlay {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#0008;
+  z-index:9;
+}
+.overlay.show { display:block; }
+.drawer {
+  position:fixed;
+  top:0;
+  right:0;
+  width:min(440px,100%);
+  height:100%;
+  background:white;
+  z-index:10;
+  display:flex;
+  flex-direction:column;
+  transform:translateX(105%);
+  transition:transform .2s;
+}
+.drawer.show { transform:translateX(0); }
+.drawer-head {
+  padding:20px;
+  border-bottom:1px solid #eee;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.close {
+  border:0;
+  background:white;
+  font-size:27px;
+}
+.cart-items { padding:15px 20px;overflow:auto;flex:1; }
+.cart-item {
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px 0;
+  border-bottom:1px solid #eee;
+}
+.cart-item small { display:block;color:var(--gray);margin-top:7px; }
+.qty { display:flex;align-items:center;gap:9px; }
+.qty button { background:white;border:1px solid #ddd;padding:5px 10px; }
+.remove {
+  margin-top:7px;
+  display:block;
+  border:0;
+  background:white;
+  text-decoration:underline;
+  color:#777;
+  font-size:11px;
+}
+.cart-bottom { padding:18px 20px;border-top:1px solid #eee; }
+.total {
+  display:flex;
+  justify-content:space-between;
+  font-weight:bold;
+  margin-bottom:16px;
+}
+.checkout { display:grid;gap:10px; }
+.checkout input,.checkout textarea,.checkout select {
+  width:100%;
+  padding:12px;
+  border:1px solid #ddd;
+  background:white;
+}
+.checkout textarea { min-height:65px; }
+.checkout button {
+  padding:14px;
+  border:0;
+  background:#168447;
+  color:white;
+  font-weight:bold;
+}
+.note { color:#777;font-size:11px;line-height:1.5; }
+@media(max-width:800px) {
+  .products { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .product-image { height:160px; }
+  .navlinks { display:none; }
+  .hero { padding:55px 22px; }
+  .benefit-grid { grid-template-columns:1fr;gap:10px; }
+}
+@media(max-width:390px) {
+  .section { padding:35px 13px; }
+  .product-info { padding:10px; }
+  .product-image { height:135px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">FRAGANCIAS · MODA · ESTILO URBANO</div>
+
+<header>
+  <nav>
+    <div class="logo">ALDS <span>STORE</span></div>
+    <div class="navlinks">
+      <a href="#productos">Productos</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <button class="cart-button" onclick="openCart()">
+      CARRITO (<span id="count">0</span>)
+    </button>
+  </nav>
+</header>
+
+<main>
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">BIENVENIDO A ALDS STORE</div>
+    <h1>Tu estilo.<br>Tu esencia.</h1>
+    <p>
+      Encuentra fragancias y accesorios para destacar.
+      Explora nuestra selección y prepara tu próximo pedido.
+    </p>
+    <button class="gold-button"
+      onclick="document.getElementById('productos').scrollIntoView({behavior:'smooth'})">
+      EXPLORAR CATÁLOGO ↓
+    </button>
+  </div>
+</section>
+
+<section class="section" id="productos">
+  <div class="eyebrow">NUESTRA SELECCIÓN</div>
+  <h2>Descubre tus favoritos</h2>
+  <p class="muted">Selecciona tus productos y agrégalos al carrito.</p>
+
+  <div class="tools" id="filters"></div>
+  <div class="tools">
+    <input id="search" placeholder="Buscar un producto..."
+      oninput="renderProducts()">
+  </div>
+  <div class="products" id="product-list"></div>
+</section>
+
+<section class="benefits" id="nosotros">
+  <div class="section">
+    <div class="eyebrow">ALDS STORE</div>
+    <h2>Comprar es sencillo</h2>
+    <div class="benefit-grid">
+      <div>
+        <h3>Selección de productos</h3>
+        <p>Consulta precios y detalles de cada artículo.</p>
+      </div>
+      <div>
+        <h3>Pedido directo</h3>
+        <p>Envía tu carrito por WhatsApp para confirmar tu compra.</p>
+      </div>
+      <div>
+        <h3>Atención personal</h3>
+        <p>Coordina disponibilidad, pago y entrega con nosotros.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contacto">
+  <div class="section">
+    <div class="eyebrow">¿TIENES DUDAS?</div>
+    <h2>Estamos para ayudarte</h2>
+    <p class="muted">Prepara tu pedido desde el carrito y contáctanos por WhatsApp.</p>
+  </div>
+</section>
+</main>
+
+<footer>
+  © <span id="year"></span> ALDS STORE. Todos los derechos reservados.
+  <br>Los productos y precios iniciales son ejemplos editables.
+</footer>
+
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <strong>Tu carrito</strong>
+    <button class="close" onclick="closeCart()">×</button>
+  </div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-bottom">
+    <div class="total">
+      <span>Total estimado</span>
+      <span id="total">$0.00</span>
+    </div>
+    <form class="checkout" id="checkout" onsubmit="sendOrder(event)">
+      <input id="customer" placeholder="Tu nombre" required>
+      <input id="phone" placeholder="Tu teléfono" required>
+      <input id="address" placeholder="Dirección o sector de entrega" required>
+      <select id="payment">
+        <option>Pago por coordinar</option>
+        <option>Transferencia</option>
+        <option>Efectivo contra entrega (si está disponible)</option>
+      </select>
+      <textarea id="notes" placeholder="Notas del pedido (opcional)"></textarea>
+      <button type="submit">PEDIR POR WHATSAPP</button>
+    </form>
+    <p class="note">
+      Este sitio no cobra online. WhatsApp abrirá un mensaje con tu pedido
+      para que puedas revisarlo y enviarlo.
+    </p>
+  </div>
+</aside>
+
+<script>
+// ===== CONFIGURA TU TIENDA AQUÍ =====
+// Escribe tu WhatsApp ecuatoriano como 5939XXXXXXXX,
+// sin el signo +, espacios ni guiones.
+const WHATSAPP = "593993267467";
+
+// Edita estos ejemplos con tus productos y precios reales.
+// Para añadir una foto, pega su URL pública en image.
+const products = [
+  {
+    id:1,
+    name:"Perfume árabe de ejemplo",
+    category:"Perfumes",
+    price:25,
+    desc:"Añade la marca, tamaño y descripción.",
+    image:""
+  },
+  {
+    id:2,
+    name:"Fragancia de ejemplo",
+    category:"Perfumes",
+    price:30,
+    desc:"Indica el aroma y la presentación.",
+    image:""
+  },
+  {
+    id:3,
+    name:"Gorra urbana",
+    category:"Gorras",
+    price:12,
+    desc:"Añade color y detalles.",
+    image:""
+  },
+  {
+    id:4,
+    name:"Camiseta básica",
+    category:"Camisetas",
+    price:15,
+    desc:"Añade tallas y colores disponibles.",
+    image:""
+  },
+  {
+    id:5,
+    name:"Camiseta gráfica",
+    category:"Camisetas",
+    price:18,
+    desc:"Describe el diseño y las tallas.",
+    image:""
+  },
+  {
+    id:6,
+    name:"Zapatillas de ejemplo",
+    category:"Zapatillas",
+    price:55,
+    desc:"Añade marca, modelo y tallas.",
+    image:""
+  }
+];
+
+let cart = {};
+let category = "Todos";
+
+function money(n) {
+  return new Intl.NumberFormat("es-EC", {
+    style:"currency", currency:"USD"
+  }).format(n);
+}
+
+function safe(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;",
+    '"':"&quot;", "'":"&#39;"
+  })[c]);
+}
+
+function renderFilters() {
+  const cats = ["Todos", ...new Set(products.map(p=>p.category))];
+  document.getElementById("filters").innerHTML = cats.map(c =>
+    `<button class="filter ${category===c?"active":""}"
+      onclick="setCategory('${safe(c)}')">${safe(c)}</button>`
+  ).join("");
+}
+
+function setCategory(c) {
+  category = c;
+  renderFilters();
+  renderProducts();
+}
+
+function renderProducts() {
+  const q = document.getElementById("search").value.toLowerCase().trim();
+  const items = products.filter(p =>
+    (category==="Todos" || p.category===category) &&
+    (p.name+" "+p.category+" "+p.desc).toLowerCase().includes(q)
+  );
+  const area = document.getElementById("product-list");
+
+  if (!items.length) {
+    area.innerHTML = '<div class="empty">No hay productos para mostrar.</div>';
+    return;
+  }
+
+  area.innerHTML = items.map(p => `
+    <article class="product">
+      <div class="product-image">
+        ${p.image
+          ? `<img src="${safe(p.image)}" alt="${safe(p.name)}"
+               onerror="this.style.display='none'">`
+          : "Añade la foto del producto"}
+      </div>
+      <div class="product-info">
+        <div class="tag">${safe(p.category)}</div>
+        <h3>${safe(p.name)}</h3>
+        <p>${safe(p.desc)}</p>
+        <div class="price">${money(p.price)}</div>
+        <button class="add-button" onclick="add(${p.id})">
+          AÑADIR AL CARRITO
+        </button>
+      </div>
+    </article>
+  `).join("");
+}
+
+function add(id) {
+  cart[id] = (cart[id] || 0) + 1;
+  renderCart();
+}
+
+function changeQty(id, delta) {
+  cart[id] = (cart[id] || 0) + delta;
+  if (cart[id] <= 0) delete cart[id];
+  renderCart();
+}
+
+function removeItem(id) {
+  delete cart[id];
+  renderCart();
+}
+
+function renderCart() {
+  const entries = Object.entries(cart);
+  const count = entries.reduce((s,[id,q])=>s+q,0);
+  const total = entries.reduce((s,[id,q]) => {
+    const p = products.find(x=>x.id===Number(id));
+    return s + (p ? p.price*q : 0);
+  }, 0);
+
+  document.getElementById("count").textContent = count;
+  document.getElementById("total").textContent = money(total);
+
+  document.getElementById("cart-items").innerHTML = entries.length
+    ? entries.map(([id,q]) => {
+        const p = products.find(x=>x.id===Number(id));
+        return `
+          <div class="cart-item">
+            <div>
+              <strong>${safe(p.name)}</strong>
+              <small>${money(p.price)} c/u · ${money(p.price*q)}</small>
+              <button class="remove" onclick="removeItem(${p.id})">Eliminar</button>
+            </div>
+            <div class="qty">
+              <button onclick="changeQty(${p.id},-1)">−</button>
+              <span>${q}</span>
+              <button onclick="changeQty(${p.id},1)">+</button>
+            </div>
+          </div>`;
+      }).join("")
+    : '<div class="empty">Tu carrito está vacío. Añade productos para comenzar.</div>';
+}
+
+function openCart() {
+  document.getElementById("overlay").classList.add("show");
+  document.getElementById("drawer").classList.add("show");
+}
+
+function closeCart() {
+  document.getElementById("overlay").classList.remove("show");
+  document.getElementById("drawer").classList.remove("show");
+}
+
+function sendOrder(event) {
+  event.preventDefault();
+
+  const entries = Object.entries(cart);
+  if (!entries.length) {
+    alert("Primero añade productos al carrito.");
+    return;
+  }
+
+  if (WHATSAPP.includes("X")) {
+    alert("Antes de pedir, configura tu número de WhatsApp en el código.");
+    return;
+  }
+
+  const total = entries.reduce((s,[id,q]) => {
+    const p = products.find(x=>x.id===Number(id));
+    return s + p.price*q;
+  }, 0);
+
+  const lines = entries.map(([id,q]) => {
+    const p = products.find(x=>x.id===Number(id));
+    return `- ${p.name} x${q}: ${money(p.price*q)}`;
+  });
+
+  const message = [
+    "Hola, ALDS STORE. Quiero hacer este pedido:",
+    "",
+    ...lines,
+    "",
+    `Total estimado: ${money(total)}`,
+    `Nombre: ${document.getElementById("customer").value}`,
+    `Teléfono: ${document.getElementById("phone").value}`,
+    `Dirección: ${document.getElementById("address").value}`,
+    `Pago: ${document.getElementById("payment").value}`,
+    `Notas: ${document.getElementById("notes").value || "Ninguna"}`,
+    "",
+    "Por favor, confirmen disponibilidad y costo de entrega."
+  ].join("\n");
+
+  const url = "https://wa.me/" + WHATSAPP +
+              "?text=" + encodeURIComponent(message);
+  window.open(url, "_blank");
+}
+
+document.getElementById("year").textContent = new Date().getFullYear();
+renderFilters();
+renderProducts();
+renderCart();
+</script>
+</body>
+</html>
